@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WPB Ver 2</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div id="wrap">
+        <main id="main">
+            <div id="canvas_wrap">
+                <canvas></canvas>
+            </div>
+        </main>
+        <aside id="aside">
+            <nav id="menu">
+                <div id="option_wrap">
+                    <div class="option" id="shape_tool">
+                        <div id="brush">
+                            <img src="#" alt="브러쉬">
+                        </div>
+                        <div id="eraser">
+                            <img src="#" alt="지우개">
+                        </div>
+                        <div id="paint">
+                            <img src="#" alt="페인트통">
+                        </div>
+                        <div id="shape">
+                            <div class="shape line"></div>
+                            <div class="shape square"></div>
+                            <div class="shape circle"></div>
+                            <div class="shape trangle"></div>
+                        </div>
+                    </div>
+                    <div class="option" id="choice_color">
+                        <div id="_choice_colors">
+
+                        </div>
+                        <div id="rgb_choice">
+                            <div id="choice"></div>
+                            <div class="rgb">
+                                <input type="range" id="red">
+                                <label for="red"></label>
+                            </div>
+                            <div class="rgb">
+                                <input type="range" id="green">
+                                <label for="green"></label>
+                            </div>
+                            <div class="rgb">
+                                <input type="range" id="blue">
+                                <label for="blue"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="btn-wrap">
+                    <button id="save" onclick="handleSaveImg">이미지 저장</button>
+                    <button id="post" onclick="handlePost">게시하기</button>
+                </div>
+            </nav>
+        </aside>
+    </div>
+</body>
+</html>
