@@ -17,17 +17,21 @@
         <aside id="aside">
             <nav id="menu">
                 <div id="option_wrap">
-                    <div class="option" id="shape_tool">
-                        <div id="brush">
-                            <img src="#" alt="브러쉬">
+                    <div class="option" id="shapes_n_tools">
+                        <div id="tools">
+                            <div class="tool" id="brush">
+                                <img src="#" alt="브러쉬">
+                                <input type="range" name="brush_size" id="brush_size">
+                            </div>
+                            <div class="tool" id="eraser">
+                                <img src="#" alt="지우개">
+                                <input type="range" name="eraser_size" id="eraser_size">
+                            </div>
+                            <div class="tool" id="paint">
+                                <img src="#" alt="페인트통">
+                            </div>
                         </div>
-                        <div id="eraser">
-                            <img src="#" alt="지우개">
-                        </div>
-                        <div id="paint">
-                            <img src="#" alt="페인트통">
-                        </div>
-                        <div id="shape">
+                        <div id="shapes">
                             <div class="shape line"></div>
                             <div class="shape square"></div>
                             <div class="shape circle"></div>
@@ -35,33 +39,56 @@
                         </div>
                     </div>
                     <div class="option" id="choice_color">
-                        <div id="_choice_colors">
-
+                        <div id="colors">
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
+                            <div class="color"></div>
                         </div>
                         <div id="rgb_choice">
                             <div id="choice"></div>
-                            <div class="rgb">
-                                <input type="range" id="red">
-                                <label for="red"></label>
+                            <div id="rgb">
+                                <div class="rgb">
+                                    <span>R</span>
+                                    <input type="range" id="red">
+                                    <label for="red"></label>
+                                </div>
+                                <div class="rgb">
+                                    <span>G</span>
+                                    <input type="range" id="green">
+                                    <label for="green"></label>
+                                </div>
+                                <div class="rgb">
+                                    <span>B</span>
+                                    <input type="range" id="blue">
+                                    <label for="blue"></label>
+                                </div>
                             </div>
-                            <div class="rgb">
-                                <input type="range" id="green">
-                                <label for="green"></label>
-                            </div>
-                            <div class="rgb">
-                                <input type="range" id="blue">
-                                <label for="blue"></label>
-                            </div>
+                            <button onclick="handleSaveColor()">색상 저장</button>
                         </div>
                     </div>
                 </div>
 
                 <div id="btn-wrap">
-                    <button id="save" onclick="handleSaveImg">이미지 저장</button>
-                    <button id="post" onclick="handlePost">게시하기</button>
+                    <button id="save" onclick="handleSaveImg()">이미지 저장</button>
+                    <button id="post" onclick="handlePost()">게시하기</button>
                 </div>
             </nav>
         </aside>
+        <footer id="footer">
+            <p>Draw Freely in Web Paint Board 2- Made by 이서영</p>
+        </footer>
     </div>
 </body>
 </html>
