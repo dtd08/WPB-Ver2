@@ -21,7 +21,7 @@
 
 body {
     background-color: var(--body-bc);
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 #wrap {
@@ -45,6 +45,11 @@ body {
     background-color: #fff;
     box-shadow: var(--box-shadow);
     border-radius: var(--border-radius);
+}
+
+#canvas {
+    width: 100%;
+    height: 100%;
 }
 
 /* menu */
@@ -92,7 +97,7 @@ body {
     margin: 0 15px;
     padding: 0 30px;
     height: 40px;
-    border-radius: var(--border-radius);
+    border-radius: var(--menu-border-radius);
 }
 
 /* shape tool */
@@ -180,6 +185,11 @@ body {
     height: 25px;
     font-size: 14px;
     border-radius: var(--menu-border-radius);
+}
+
+.rgb > label {
+    display: inline-block;
+    width: 24px;
 }
 
 /* footer */
