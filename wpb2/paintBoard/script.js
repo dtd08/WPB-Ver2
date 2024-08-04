@@ -1,6 +1,18 @@
 /// html에서 canvas 불러오기
-const canvas = document.getElementById("canvas");  // canvas 저장
+const canvasWraps = document.getElementsByClassName("canvas_wrap");  // canvas 저장
+const canvases = document.getElementsByClassName("canvas");
 
+let canvas = canvases[0];
+let canvasIdx = 1;
+
+let interval = setInterval(()=> {
+    canvas = canvases[canvasIdx];
+    console.log(canvas, canvasIdx++);
+    if (canvasIdx == canvases.length) {
+        console.log("stop");
+        clearInterval(interval);
+    }
+}, 3000);
 
 /// context를 선언 및 canvas 기본 셋팅
 /*
@@ -13,7 +25,7 @@ const INITIAL_COLOR = "#000";
 // ctx.fillRect(0, 0, canvas.width, canvas.height); // 순서대로 x좌표, y좌표, 가로길이, 세로길이
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.fillStyle = INITIAL_COLOR;
-ctx.lineWidth = 2.5;
+ctx.lineWidth = 2;
 
 canvas.width = 1200;
 canvas.height = 800;
@@ -21,6 +33,13 @@ canvas.height = 800;
 
 // canvas event 감지
 let painting = false;
+
+// 지우개 감지
+let erasing = false;
+
+// 브리쉬 & 지우개 사이즈
+let brushSizeValue = 1;
+let eraserSizeValue = 1;
 
 function stopPainting() {
     painting = false;
@@ -38,9 +57,18 @@ function onMouseMove(event) {
     if (!painting) { // 마우스를 클릭하지 않은 채로 이동할 때
         ctx.beginPath();
         ctx.moveTo(x, y);
+        ctx.lineWidth = brushSizeValue;
     } else { // 마우스를 클릭한 채로 이동할 때
-        ctx.lineTo(x, y);
-        ctx.stroke();
+        if (erasing) {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.lineWidth = eraserSizeValue;
+        } else {
+            ctx.globalCompositeOperation = "source-over";
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
     }
 }
 
@@ -50,7 +78,6 @@ if (canvas) {
     canvas.addEventListener("mouseup", stopPainting);
     canvas.addEventListener("mouseleave", stopPainting);
 }
-
 
 /// rgb 조절 및 선택 기능
 const choice = document.getElementById("choice");
@@ -67,7 +94,7 @@ Array.from(rgb).forEach(rgb => {
         rgbSlider.addEventListener("input",() => {
             let rgbValue = rgbSlider.value;
             rgb.querySelector("label").innerHTML = rgbValue;
-            
+
             if (rgbSlider.id == "red") red = rgbValue;
             else if (rgbSlider.id == "green") green = rgbValue;
             else blue = rgbValue;
@@ -80,14 +107,25 @@ Array.from(rgb).forEach(rgb => {
 
 /// 색상 선택 기능
 const colors = document.getElementsByClassName("color"); // 컬러칩 불러오기
+let idx = 1;
+
+// 선택한 색상 저장
+saveColor.addEventListener("click", handleSaveColor);
 
 // 컬러칩 배열 내 각 컬러들에 대한 클릭 이벤트 감지
 Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick));
+
 
 function handleColorClick(event) {
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
+}
+
+// 설정한 색상 저장하는 함수
+function handleSaveColor() {
+    colors[idx++].style.backgroundColor = choice.style.backgroundColor;
+    if (idx >= colors.length) idx %= colors.length;
 }
 
 
@@ -101,17 +139,18 @@ brush.addEventListener("click", handleBrushClick);
 
 // 원래 색상으로 변경하는 함수
 function handleBrushClick() {
-    ctx.fillStyle = nowColor;
+    erasing = false;
+    ctx.strokeStyle  = nowColor;
 }
 
 // 슬라이더 인풋 감지
 if (brushSize) {
-    brushSize.addEventListener("input", handleInput);
+    brushSize.addEventListener("input", handleBrushInput);
 }
 
 // 굵기 조정 함수
-function handleInput(slider = brushSize) {
-    let sizeValue = slider.value;
+function handleBrushInput() {
+    brushSizeValue = brushSize.value;
     ctx.lineWidth = sizeValue;
 }
 
@@ -131,11 +170,9 @@ function handleMode() { // bucket 클릭 시 실행 함수
     const bucketTxt = document.querySelector("#bucket > span");
     if (filling === true) {
         filling = false;
-        bucketTxt.innerHTML = "FILL";
     } else {
         filling = true;
         fillCanvas();
-        bucketTxt.innerHTML = "PAINT";
     }
 }
 
@@ -144,20 +181,26 @@ function handleMode() { // bucket 클릭 시 실행 함수
 const eraser = document.querySelector("#eraser > img");
 const eraserSize = document.querySelector("#eraser_size")
 
-eraser.addEventListener("click", eraserHandle);
+eraser.addEventListener("click", handleEraser);
 
 if (eraserSize) {
-    eraserSize.addEventListener("input", handleInput(eraserSize));
+    eraserSize.addEventListener("input", handleEraserInput);
 }
 
-function eraserHandle() {
-    nowColor = ctx.fillStyle; // 마지막 색상 저장
-    ctx.fillStyle = "white";
+function handleEraser() {
+    console.log("eraser click");
+    erasing = true;
+    nowColor = ctx.strokeStyle ; // 마지막 색상 저장
+}
+
+function handleEraserInput() {
+    eraserSizeValue = eraserSize.value;
+    ctx.lineWidth = sizeValue;
 }
 
 
 /// 저장 기능
-const save = document.querySelector(".save");
+const save = document.getElementById("save");
 
 if (save) {
     save.addEventListener("click", saveImg);
@@ -167,6 +210,7 @@ function saveImg() {
     const img = canvas.toDataURL("image/png"); // 캔버스 데이터 -> 이미지
     const link = document.createElement("a"); // html에 a태그 생성
     link.href = img; // 링크에 이미지 할당
-    link.download = ("download"); // 링크 다운 시 이름 할당
+    const fileName = prompt("Enter the file name", "my_drawing");
+    link.download = fileName || "download";
     link.click(); // 링크 클릭 이벤트 실행
 }
