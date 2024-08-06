@@ -1,18 +1,35 @@
 /// html에서 canvas 불러오기
-const canvasWraps = document.getElementsByClassName("canvas_wrap");  // canvas 저장
 const canvases = document.getElementsByClassName("canvas");
 
 let canvas = canvases[0];
-let canvasIdx = 1;
+let canvasIdx = 0;
 
 let interval = setInterval(()=> {
-    canvas = canvases[canvasIdx];
-    console.log(canvas, canvasIdx++);
-    if (canvasIdx == canvases.length) {
+    if (canvasIdx == canvases.length-1) {
         console.log("stop");
+        showGoResult();
         clearInterval(interval);
+    } else {
+        canvas.className = "canvas";
+        canvas = canvases[++canvasIdx];
+        canvas.className += ' on';
+        console.log(canvases[canvasIdx-1], canvas, canvasIdx);
     }
 }, 3000);
+
+
+const go = document.getElementById("go_result");
+const goButton = document.getElementById("stop");
+
+goButton.addEventListener("click", postResult);
+
+function postResult() {
+    console.log("post result");
+}
+
+function showGoResult() {
+    go.style.display = "block";
+}
 
 /// context를 선언 및 canvas 기본 셋팅
 /*
